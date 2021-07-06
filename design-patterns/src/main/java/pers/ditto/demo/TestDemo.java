@@ -4,6 +4,7 @@ package pers.ditto.demo;
  * @author OrangeCH3
  * @create 2021-07-06 15:16
  */
+@SuppressWarnings("all")
 public class TestDemo {
 
     public static void main(String[] args) {
