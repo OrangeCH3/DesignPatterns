@@ -1,4 +1,4 @@
-package pers.ditto.principle;
+package pers.ditto.principle.singleresponsibility;
 
 /**
  * @author OrangeCH3
