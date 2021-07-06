@@ -30,7 +30,7 @@
 
 以交通工具为例：
 ```java
-package pers.ditto.principle;
+package pers.ditto.principle.singleresponsibility;
 
 /**
  * @author OrangeCH3
@@ -63,7 +63,7 @@ class Vehicle {
 ```
 
 ```java
-package pers.ditto.principle;
+package pers.ditto.principle.singleresponsibility;
 
 /**
  * @author OrangeCH3
@@ -113,7 +113,7 @@ class WaterVehicle {
 ```
 
 ```java
-package pers.ditto.principle;
+package pers.ditto.principle.singleresponsibility;
 
 /**
  * @author OrangeCH3
