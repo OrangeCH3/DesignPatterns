@@ -408,8 +408,131 @@ class ClassCDitto {
 
 > 依赖倒转原则
 
-TODO
+依赖倒转原则(Dependence Inversion Principle)是指：
 
+1. 高层模块不应该依赖低层模块，二者都应该依赖其抽象
+2. 抽象不应该依赖细节，细节应该依赖抽象
+3. 依赖倒转(倒置)的中心思想是面向接口编程
+4. 依赖倒转原则是基于这样的设计理念：相对于细节的多变性，抽象的东西要稳定的多。以抽象为基础搭建的架构比以细节为基础的架构要稳定的多。在 java 中，抽象指的是接口或抽象类，细节就是具体的实现类
+5. 使用接口或抽象类的目的是制定好规范，而不涉及任何具体的操作，把展现细节的任务交给他们的实现类去完成
+
+案例(未使用依赖倒转原则前):
+
+```java
+package pers.ditto.principle.inversion;
+
+import org.junit.Test;
+
+/**
+ * @author OrangeCH3
+ * @create 2021-07-07 18:30
+ */
+
+@SuppressWarnings("all")
+public class DependenceInversion {
+
+    public static void main(String[] args) {
+
+        PersonTest personTest = new PersonTest();
+        personTest.receive(new EmailTest());
+
+    }
+
+    // 也可以导入JUnit包插入@Test注解完成测试
+    @Test
+    public void testPerson() {
+        PersonTest personTest = new PersonTest();
+        personTest.receive(new EmailTest());
+    }
+}
+
+// 完成要给Person接收消息的功能
+// 方式1分析
+// 1. 简单，比较容易实现
+// 2. 如果获取的对象是微信、短信等，则需要新增类及类中方法
+// 3. 解决思路：引入一个抽象的接口IReceiver，表示接收者，这样Person类与接口IReceiver发生依赖
+// 4. Email、WeChat等实现接口即可，这样才符合依赖倒转原则
+class PersonTest {
+    public void receive(EmailTest emailTest) {
+        System.out.println(emailTest.getInfo());
+    }
+}
+
+class EmailTest {
+    public String getInfo() {
+        return "电子邮件信息：Hello, OrangeCH3!";
+    }
+}
+```
+
+案例(使用依赖倒转原则后):
+
+```java
+package pers.ditto.principle.inversion;
+
+import org.junit.Test;
+
+/**
+ * @author OrangeCH3
+ * @create 2021-07-07 18:43
+ */
+
+@SuppressWarnings("all")
+public class DependenceInversionDitto {
+
+    @Test
+    public void test() {
+
+        // 客户端无需改变
+        PersonDitto personDitto = new PersonDitto();
+        personDitto.receive(new EmailDitto());
+        System.out.println();
+
+        personDitto.receive(new WeChatDitto());
+    }
+}
+
+// 定义一个接口
+interface IReceiver {
+    String getInfo();
+}
+
+class EmailDitto implements IReceiver {
+
+    @Override
+    public String getInfo() {
+        return "电子邮件信息：HelloDitto, OrangeCH3!";
+    }
+}
+
+// 增加WeChat
+class WeChatDitto implements IReceiver {
+
+    @Override
+    public String getInfo() {
+        return "微信收到消息：HelloDitto, OrangeCH3!";
+    }
+}
+
+class PersonDitto {
+
+    // 这里是对接口的依赖
+    public void receive(IReceiver iReceiver) {
+        System.out.println(iReceiver.getInfo());
+    }
+}
+```
+
+依赖倒转原则的注意事项和细节:
+1. 低层模块尽量都要有抽象类或接口，或者两者都有，程序稳定性更好
+2. 变量的声明类型尽量是抽象类或接口, 这样我们的变量引用和实际对象间，就存在一个缓冲层，利于程序扩展和优化
+3. 继承时遵循里氏替换原则
+
+---
+
+> 里氏替换原则
+
+TODO
 
 
 
