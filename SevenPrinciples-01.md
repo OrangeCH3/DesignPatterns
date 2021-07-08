@@ -532,7 +532,122 @@ class PersonDitto {
 
 > 里氏替换原则
 
+里氏替换原则(Liskov Substitution Principle)在 1988 年，由麻省理工学院的以为姓里的女士提出的
+
+1. 如果对每个类型为 T1 的对象 o1，都有类型为 T2 的对象 o2，使得以 T1 定义的所有程序 P 在所有的对象 o1 都代换成 o2 时，程序 P 的行为没有发生变化，那么类型 T2 是类型 T1 的子类型。换句话说，所有引用基类的地方必须能透明地使用其子类的对象
+2. 在使用继承时，遵循里氏替换原则，在子类中尽量不要重写父类的方法
+3. 里氏替换原则告诉我们，继承实际上让两个类耦合性增强了，在适当的情况下，可以通过聚合，组合，依赖 来解决问题
+
+案例(未使用里氏替换原则前):
+
+```java
+package pers.ditto.principle.liskov;
+
+import org.junit.Test;
+
+/**
+ * @author OrangeCH3
+ * @create 2021-07-08 10:29
+ */
+
+@SuppressWarnings("all")
+public class Liskov {
+
+    @Test
+    public void test() {
+        LiskovA liskovA = new LiskovA();
+        System.out.println("11 - 3 = " + liskovA.func(11, 3));
+        System.out.println();
+
+        LiskovB liskovB = new LiskovB();
+        // 本意是求11-3，但由于重写父类方法，造成错误
+        System.out.println("11 - 3 = " + liskovB.func(11, 3));
+        System.out.println("11 - 3 + 9 = " + liskovB.funcImprove(11, 3));
+        System.out.println();
+        // 重写方法后实际的结果为下
+        System.out.println("11 + 3 = " + liskovB.func(11, 3));
+        System.out.println("11 + 3 + 9 = " + liskovB.funcImprove(11, 3));
+    }
+}
+
+class LiskovA {
+    public int func(int num1, int num2) {
+        return num1 - num2;
+    }
+}
+
+// 本意为B类新增一个加法函数，而在编程中无意将A类的func函数重写
+class LiskovB extends LiskovA {
+    public int func(int a, int b) {
+        return a + b;
+    }
+
+    public int funcImprove(int a, int b) {
+        return func(a, b) + 9;
+    }
+}
+```
+
+案例(使用里氏替换原则后):
+
+```java
+package pers.ditto.principle.liskov;
+
+import org.junit.Test;
+
+/**
+ * @author OrangeCH3
+ * @create 2021-07-08 10:41
+ */
+
+@SuppressWarnings("all")
+public class LiskovDitto {
+
+    @Test
+    public void test() {
+
+        LiskovADitto liskovADitto = new LiskovADitto();
+        System.out.println("13 - 9 = " + liskovADitto.func(13, 9));
+        System.out.println();
+
+        // 应用里氏替换原则后，调用的方法就会很明确
+        LiskovBDitto liskovBDitto = new LiskovBDitto();
+        System.out.println("1 + 3 = " + liskovBDitto.func(1, 3));
+        System.out.println("1 + 3 + 9 = " + liskovBDitto.funcImprove(1, 3));
+
+    }
+}
+
+// 首先创建一个更加基础的类
+class LiskovBase {
+
+}
+
+class LiskovADitto {
+    public int func(int num1, int num2) {
+        return num1 - num2;
+    }
+}
+
+// 应用里氏替换原则降低类之间的耦合度
+class LiskovBDitto extends LiskovBase {
+    public int func(int a, int b) {
+        return a + b;
+    }
+
+    public int funcImprove(int a, int b) {
+        return func(a, b) + 9;
+    }
+}
+```
+
+---
+
+> 开闭原则
+
 TODO
+
+
 
 
 
