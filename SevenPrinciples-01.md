@@ -830,8 +830,237 @@ class OtherGraphicDitto extends ShapeDitto {
 
 > 迪米特法则
 
-// TODO
+迪米特法则(Demeter Principle)又叫最少知道原则，即一个类对自己依赖的类知道的越少越好
 
+1. 一个对象应该对其他对象保持最少的了解
+2. 类与类关系越密切，耦合度越大
+3. 对于被依赖的类不管多么复杂，都尽量将逻辑封装在类的内部。对外除了提供的public方法，不对外泄露任何信息
+4. 只与直接的朋友通信，耦合的方式很多，依赖，关联，组合，聚合等。其中，我们称出现成员变量，方法参数，方法返回值中的类为直接的朋友，而出现在局部变量中的类不是直接的朋友。也就是说，陌生的类最好不要以局部变量的形式出现在类的内部。
+
+案例(未使用迪米特原则前):
+
+```java
+package pers.ditto.principle.demeter;
+
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @author OrangeCH3
+ * @create 2021-07-09 12:08
+ */
+
+@SuppressWarnings("all")
+// 客户端
+public class Demeter {
+
+    @Test
+    public void test() {
+
+        // 创建了一个 SchoolManager 对象
+        SchoolManager schoolManager = new SchoolManager();
+        // 输出学院的员工 id 和 学校总部的员工信息
+        schoolManager.printAllEmployee(new CollegeManager());
+    }
+}
+
+// 学校总部员工类
+class Employee {
+
+    private String id;
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
+}
+
+// 学院的员工类
+class CollegeEmployee {
+    private String id;
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
+}
+
+// 管理学院员工的管理类
+class CollegeManager {
+    // 返回学院的所有员工
+    public List<CollegeEmployee> getAllEmployee() {
+        List<CollegeEmployee> list = new ArrayList<CollegeEmployee>();
+        for (int i = 0; i < 10; i++) {
+            // 这里我们增加了 10 个员工到 list
+            CollegeEmployee emp = new CollegeEmployee();
+            emp.setId("学院员工 id= " + i);
+            list.add(emp);
+        }
+        return list;
+    }
+}
+
+// 学校管理类
+// 分析 SchoolManager 类的直接朋友类有哪些 Employee、 CollegeManager
+// CollegeEmployee 不是直接朋友而是一个陌生类，这样违背了 迪米特法则
+class SchoolManager {
+    // 返回学校总部的员工
+    public List<Employee> getAllEmployee()
+    { List<Employee> list = new ArrayList<Employee>();
+        for (int i = 0; i < 5; i++) { //这里我们增加了 5 个员工到 list
+            Employee emp = new Employee();
+            emp.setId("学校总部员工 id= " + i);
+            list.add(emp);
+        }
+        return list;
+    }
+
+    // 该方法完成输出学校总部和学院员工信息(id)
+    void printAllEmployee(CollegeManager sub) {
+        // 分析问题
+        // 1. 这 里 的 CollegeEmployee 不是 SchoolManager 的直接朋友
+        // 2. CollegeEmployee 是以局部变量方式出现在 SchoolManager
+        // 3. 违反了 迪米特法则
+        // 获取到学院员工
+        List<CollegeEmployee> list1 = sub.getAllEmployee();
+        System.out.println("学院员工ID信息如下：");
+        for (CollegeEmployee e : list1) {
+            System.out.println(e.getId());
+        }
+        // 获取到学校总部员工
+        List<Employee> list2 = this.getAllEmployee();
+        System.out.println("学校总部员工ID信息如下：");
+        for (Employee e : list2) {
+            System.out.println(e.getId());
+        }
+    }
+}
+```
+
+案例(使用迪米特原则后):
+
+```java
+package pers.ditto.principle.demeter;
+
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @author OrangeCH3
+ * @create 2021-07-09 12:15
+ */
+
+@SuppressWarnings("all")
+public class DemeterDitto {
+
+    @Test
+    public void test() {
+
+        System.out.println("使用迪米特法则后->Ditto");
+        // 创建了一个 SchoolManager 对象
+        SchoolManagerDitto schoolManagerDitto = new SchoolManagerDitto();
+        // 输出学院的员工 id 和 学校总部的员工信息
+        schoolManagerDitto.printAllEmployee(new CollegeManagerDitto());
+    }
+}
+
+// 学校总部员工类
+class EmployeeDitto {
+    private String id;
+
+    public void setId(String id)
+    { this.id = id;
+    }
+    public String getId()
+    { return id;
+    }
+}
+
+// 学院的员工类
+class CollegeEmployeeDitto {
+    private String id;
+
+    public void setId(String id)
+    { this.id = id;
+    }
+
+    public String getId()
+    { return id;
+    }
+}
+
+// 管理学院员工的管理类
+class CollegeManagerDitto {
+    // 返回学院的所有员工
+    public List<CollegeEmployeeDitto> getAllEmployee() {
+        List<CollegeEmployeeDitto> list = new ArrayList<CollegeEmployeeDitto>();
+        for (int i = 0; i < 10; i++) { //这里我们增加了 10 个员工到 list
+            CollegeEmployeeDitto emp = new CollegeEmployeeDitto();
+            emp.setId("学院员工 id= " + i);
+            list.add(emp);
+        }
+        return list;
+    }
+
+    // 输出学院员工的信息
+    public void printEmployee() {
+        // 获取到学院员工
+        List<CollegeEmployeeDitto> list1 = getAllEmployee();
+        System.out.println("学院员工学院员工ID信息如下：");
+        for (CollegeEmployeeDitto e : list1) {
+            System.out.println(e.getId());
+        }
+    }
+}
+
+// 学校管理类
+// 分析 SchoolManager 类的直接朋友类有哪些 Employee、 CollegeManager
+// CollegeEmployee 不是 直接朋友 而是一个陌生类，这样违背了 迪米特法则
+class SchoolManagerDitto {
+    //返回学校总部的员工
+    public List<EmployeeDitto> getAllEmployee() {
+        List<EmployeeDitto> list = new ArrayList<EmployeeDitto>();
+        for (int i = 0; i < 5; i++) { //这里我们增加了 5 个员工到 list
+            EmployeeDitto emp = new EmployeeDitto();
+            emp.setId("学校总部员工 id= " + i);
+            list.add(emp);
+        }
+        return list;
+    }
+
+    // 该方法完成输出学校总部和学院员工信息(id)
+    void printAllEmployee(CollegeManagerDitto sub) {
+        // 分析问题
+        // 1. 将输出学院的员工方法，封装到 CollegeManager
+        sub.printEmployee();
+        // 获取到学校总部员工
+        List<EmployeeDitto> list2 = this.getAllEmployee();
+        System.out.println("学校总部员工ID信息如下：");
+        for (EmployeeDitto e : list2) {
+            System.out.println(e.getId());
+        }
+    }
+}
+```
+
+迪米特法则注意事项和细节:
+
+1. 迪米特法则的核心是降低类之间的耦合
+2. 由于每个类都减少了不必要的依赖，因此迪米特法则只是要求降低类间(对象间)耦合关系，并不是要求完全没有依赖关系
+
+---
+
+> 合成复用原则
 
 
 
