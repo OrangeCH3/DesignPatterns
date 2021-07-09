@@ -1064,7 +1064,7 @@ class SchoolManagerDitto {
 
 原则是尽量使用合成/聚合的方式，而不是使用继承
 
-![合成复用原则UML类图](./合成复用原则UML类图.png)
+![合成复用原则UML类图](./PictureMaterial/合成复用原则UML类图.png)
 
 ---
 
