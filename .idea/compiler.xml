@@ -10,5 +10,8 @@
         <module name="seven-principles" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="seven-principles" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
