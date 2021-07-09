@@ -53,7 +53,7 @@ class CollegeEmployeeDitto {
 class CollegeManagerDitto {
     // 返回学院的所有员工
     public List<CollegeEmployeeDitto> getAllEmployee() {
-        List<CollegeEmployeeDitto> list = new ArrayList<CollegeEmployeeDitto>();
+        List<CollegeEmployeeDitto> list = new ArrayList<>();
         for (int i = 0; i < 10; i++) { //这里我们增加了 10 个员工到 list
             CollegeEmployeeDitto emp = new CollegeEmployeeDitto();
             emp.setId("学院员工 id= " + i);
@@ -79,7 +79,7 @@ class CollegeManagerDitto {
 class SchoolManagerDitto {
     //返回学校总部的员工
     public List<EmployeeDitto> getAllEmployee() {
-        List<EmployeeDitto> list = new ArrayList<EmployeeDitto>();
+        List<EmployeeDitto> list = new ArrayList<>();
         for (int i = 0; i < 5; i++) { //这里我们增加了 5 个员工到 list
             EmployeeDitto emp = new EmployeeDitto();
             emp.setId("学校总部员工 id= " + i);
