@@ -7,7 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="uml-class-diagram" />
-        <module name="design-patterns" />
+        <module name="seven-principles" />
       </profile>
     </annotationProcessing>
   </component>
