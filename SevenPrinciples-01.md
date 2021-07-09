@@ -645,7 +645,192 @@ class LiskovBDitto extends LiskovBase {
 
 > 开闭原则
 
-TODO
+开闭原则（Open Closed Principle）是编程中最基础、最重要的设计原则
+
+1. 一个软件实体如类，模块和函数应该对扩展开放(对提供方)，对修改关闭(对使用方)。用抽象构建框架，用实现扩展细节
+2. 当软件需要变化时，尽量通过扩展软件实体的行为来实现变化，而不是通过修改已有的代码来实现变化
+3. 编程中遵循其它原则，以及使用设计模式的目的就是遵循开闭原则
+
+案例(未使用开闭原则前):
+
+```java
+package pers.ditto.principle.ocp;
+
+import org.junit.Test;
+
+/**
+ * @author OrangeCH3
+ * @create 2021-07-09 11:25
+ */
+
+@SuppressWarnings("all")
+public class Ocp {
+
+    @Test
+    public void test() {
+
+        // 方式1
+        // 1. 方式1优点是比较好理解，简单易操作
+        // 2. 缺点是违反了设计模式的 ocp 原则，即对扩展开放(提供方)，对修改关闭(使用方)。即当我们给类增加新功能的时候，尽量不修改代码，或者尽可能少修改代码
+        // 3. 比如我们这时要新增加一个图形种类 三角形，我们需要做如下修改，修改的地方较多
+        // 改进思路：把创建 Shape 类做成抽象类， 并提供一个抽象的 draw 方法，让子类去实现即可，这样我们有新的图形种类时，只需要让新的图形类继承 Shape，并实现 draw 方法即可，使用方的代码就不需要修改
+        GraphicEditor graphicEditor = new GraphicEditor();
+        graphicEditor.drawShape(new Rectangle());
+        graphicEditor.drawShape(new Circle());
+        graphicEditor.drawShape(new Triangle());
+    }
+}
+
+// 这是一个用于绘图的类[使用方]
+class GraphicEditor {
+    //接收 Shape 对象，然后根据 type，来绘制不同的图形
+    public void drawShape(Shape s) {
+        if (s.m_type == 1)
+            drawRectangle(s);
+        else if (s.m_type == 2)
+            drawCircle(s);
+        else if (s.m_type == 3)
+            drawTriangle(s);
+    }
+
+    //绘制矩形
+    public void drawRectangle(Shape r)
+    { System.out.println(" 绘制矩形 ");
+    }
+
+    //绘制圆形
+    public void drawCircle(Shape r) {
+        System.out.println(" 绘制圆形 ");
+    }
+
+    //绘制三角形
+    public void drawTriangle(Shape r)
+    { System.out.println(" 绘制三角形 ");
+    }
+}
+
+//Shape 类，基类
+class Shape {
+    int m_type;
+}
+
+class Rectangle extends Shape {
+    Rectangle() {
+    super.m_type = 1;
+    }
+}
+
+class Circle extends Shape {
+    Circle() {
+    super.m_type = 2;
+    }
+}
+
+//新增画三角形
+class Triangle extends Shape {
+    Triangle() {
+    super.m_type = 3;
+    }
+}
+```
+
+案例(使用开闭原则后):
+
+```java
+package pers.ditto.principle.ocp;
+
+import org.junit.Test;
+
+/**
+ * @author OrangeCH3
+ * @create 2021-07-09 11:32
+ */
+
+@SuppressWarnings("all")
+public class OcpDitto {
+
+    @Test
+    public void test() {
+
+        // 改进后的代码符合开闭原则
+        GraphicEditorDitto graphicEditorDitto = new GraphicEditorDitto();
+        graphicEditorDitto.drawShape(new RectangleDitto());
+        graphicEditorDitto.drawShape(new CircleDitto());
+        graphicEditorDitto.drawShape(new TriangleDitto());
+        graphicEditorDitto.drawShape(new OtherGraphicDitto());
+    }
+}
+
+//这是一个用于绘图的类 [使用方]
+class GraphicEditorDitto {
+    //接收 Shape 对象，调用 draw 方法
+    public void drawShape(ShapeDitto s) {
+        s.draw();
+    }
+}
+
+//Shape 类，基类
+abstract class ShapeDitto {
+    int m_type;
+    public abstract void draw();//抽象方法
+}
+
+class RectangleDitto extends ShapeDitto {
+
+    RectangleDitto() {
+        super.m_type = 1;
+    }
+
+    @Override
+    public void draw() {
+        System.out.println(" 绘制矩形-OCP ");
+    }
+}
+
+class CircleDitto extends ShapeDitto {
+
+    CircleDitto() {
+    super.m_type = 2;
+    }
+
+    @Override
+    public void draw() {
+
+        System.out.println(" 绘制圆形-OCP ");
+    }
+}
+
+//新增画三角形
+class TriangleDitto extends ShapeDitto {
+
+    TriangleDitto() {
+    super.m_type = 3;
+}
+    @Override
+    public void draw() {
+
+        System.out.println(" 绘制三角形-OCP ");
+    }
+}
+
+//新增一个图形
+class OtherGraphicDitto extends ShapeDitto {
+    OtherGraphicDitto() {
+    super.m_type = 4;
+}
+    @Override
+    public void draw() {
+
+        System.out.println(" 绘制其它图形-OCP ");
+    }
+}
+```
+
+---
+
+> 迪米特法则
+
+// TODO
 
 
 
