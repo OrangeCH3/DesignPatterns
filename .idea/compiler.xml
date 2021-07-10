@@ -7,8 +7,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="uml-class-diagram" />
-        <module name="seven-principles" />
+        <module name="singleton-mode" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="seven-principles" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

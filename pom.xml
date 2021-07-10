@@ -11,6 +11,7 @@
     <modules>
         <module>design-patterns</module>
         <module>uml-class-diagram</module>
+        <module>singleton-mode</module>
     </modules>
 
     <properties>
