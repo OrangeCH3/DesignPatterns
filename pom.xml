@@ -12,6 +12,7 @@
         <module>seven-principles</module>
         <module>uml-class-diagram</module>
         <module>singleton-mode</module>
+        <module>factory-mode</module>
     </modules>
 
     <properties>
