@@ -13,6 +13,7 @@
         <module>uml-class-diagram</module>
         <module>singleton-mode</module>
         <module>factory-mode</module>
+        <module>prototype-mode</module>
     </modules>
 
     <properties>
