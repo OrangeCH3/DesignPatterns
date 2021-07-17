@@ -16,6 +16,7 @@
         <module>prototype-mode</module>
         <module>builder-mode</module>
         <module>adapter-mode</module>
+        <module>bridge-mode</module>
     </modules>
 
     <properties>
