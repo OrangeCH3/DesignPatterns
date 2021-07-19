@@ -57,16 +57,304 @@
 代码实现如下：
 
 ```java
+package pers.ditto.decorator;
 
+/**
+ * @author OrangeCH3
+ * @create 2021-07-19 10:38
+ */
+
+@SuppressWarnings("all")
+public abstract class Drink {
+
+    public String des; // 描述
+    private float price = 0.0f;
+
+    public String getDes() {
+        return des;
+    }
+
+    public void setDes(String des) {
+        this.des = des;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
+    }
+
+    //计算费用的抽象方法
+    //子类来实现
+    public abstract float cost();
+}
 ```
 
+```java
+package pers.ditto.decorator;
+
+/**
+ * @author OrangeCH3
+ * @create 2021-07-19 10:39
+ */
+
+@SuppressWarnings("all")
+public class Coffee extends Drink{
+
+    @Override
+    public float cost() {
+        return getPrice();
+    }
+}
+```
+
+```java
+package pers.ditto.decorator;
 
 
+/**
+ * @author OrangeCH3
+ * @create 2021-07-19 10:42
+ */
 
+@SuppressWarnings("all")
+public class Espresso extends Coffee {
 
+    public Espresso() {
+        setDes(" 意大利咖啡 ");
+        setPrice(6.0f);
+    }
+}
+```
 
+```java
+package pers.ditto.decorator;
 
+/**
+ * @author OrangeCH3
+ * @create 2021-07-19 10:43
+ */
 
+@SuppressWarnings("all")
+public class DeCaf extends Coffee{
 
+    public DeCaf() {
+        setDes(" 无因咖啡 ");
+        setPrice(1.0f);
+    }
+}
+```
 
+```java
+package pers.ditto.decorator;
 
+/**
+ * @author OrangeCH3
+ * @create 2021-07-19 10:41
+ */
+
+@SuppressWarnings("all")
+public class ShortBlack extends Coffee{
+
+    public ShortBlack() {
+        setDes(" shortblack ");
+        setPrice(4.0f);
+    }
+}
+```
+
+```java
+package pers.ditto.decorator;
+
+/**
+ * @author OrangeCH3
+ * @create 2021-07-19 10:42
+ */
+
+@SuppressWarnings("all")
+public class LongBlack extends Coffee{
+
+    public LongBlack() {
+        setDes(" longblack ");
+        setPrice(5.0f);
+    }
+}
+```
+
+```java
+package pers.ditto.decorator;
+
+/**
+ * @author OrangeCH3
+ * @create 2021-07-19 10:43
+ */
+
+@SuppressWarnings("all")
+public class Decorator extends Drink{
+
+    private Drink obj;
+
+    public Decorator(Drink obj) { //组合
+        this.obj = obj;
+    }
+
+    @Override
+    public float cost() {
+        return getPrice() + obj.cost();
+    }
+
+    @Override
+    public String getDes() {
+        // obj.getDes() 输出被装饰者的信息
+        return des + " " + getPrice() + " && " + obj.getDes();
+    }
+}
+```
+
+```java
+package pers.ditto.decorator;
+
+/**
+ * @author OrangeCH3
+ * @create 2021-07-19 10:46
+ */
+
+@SuppressWarnings("all")
+public class Soy extends Decorator{
+     public Soy(Drink obj) {
+        super(obj);
+        setDes(" 豆浆 ");
+        setPrice(1.5f);
+    }
+}
+```
+
+```java
+package pers.ditto.decorator;
+
+/**
+ * @author OrangeCH3
+ * @create 2021-07-19 10:46
+ */
+
+@SuppressWarnings("all")
+public class Chocolate extends Decorator{
+    public Chocolate(Drink obj) {
+        super(obj);
+        setDes(" 巧克力 ");
+        setPrice(3.0f);
+    }
+}
+```
+
+```java
+package pers.ditto.decorator;
+
+/**
+ * @author OrangeCH3
+ * @create 2021-07-19 10:47
+ */
+
+@SuppressWarnings("all")
+public class Milk extends Decorator{
+    public Milk(Drink obj) {
+        super(obj);
+        setDes(" 牛奶 ");
+        setPrice(2.0f);
+    }
+}
+```
+
+```java
+package pers.ditto.decorator;
+
+/**
+ * @author OrangeCH3
+ * @create 2021-07-19 10:48
+ */
+
+@SuppressWarnings("all")
+public class CoffeeBar {
+
+    public static void main(String[] args) {
+        // 1. 点一份 LongBlack
+        Drink order = new LongBlack();
+        System.out.println("点一份 LongBlack：");
+        System.out.println("费用=" + order.cost());
+        System.out.println("描述=" + order.getDes());
+        System.out.println();
+
+        // 2. order 加入一份牛奶
+        order = new Milk(order);
+
+        System.out.println("Order 加入一份牛奶：");
+        System.out.println("费用 =" + order.cost());
+        System.out.println("描述 = " + order.getDes());
+        System.out.println();
+
+        // 3. order 加入一份巧克力
+
+        order = new Chocolate(order);
+
+        System.out.println("Order 再加入一份巧克力：");
+        System.out.println("费用 =" + order.cost());
+        System.out.println("描述 = " + order.getDes());
+        System.out.println();
+
+        // 3. order 加入一份巧克力
+
+        order = new Chocolate(order);
+
+        System.out.println("Order 再再加入一份巧克力：");
+        System.out.println("费用 =" + order.cost());
+        System.out.println("描述 = " + order.getDes());
+        System.out.println();
+
+        Drink order2 = new DeCaf();
+
+        System.out.println("点一份无因咖啡：");
+        System.out.println("费用 =" + order2.cost());
+        System.out.println("描述 = " + order2.getDes());
+        System.out.println();
+
+        order2 = new Milk(order2);
+
+        System.out.println("Order 加入一份牛奶：");
+        System.out.println("费用 =" + order2.cost());
+        System.out.println("描述 = " + order2.getDes());
+
+    }
+}
+```
+
+```java
+/* 输出结果为：
+        点一份 LongBlack：
+        费用=5.0
+        描述= longblack 
+
+        Order 加入一份牛奶：
+        费用 =7.0
+        描述 =  牛奶  2.0 &&  longblack 
+
+        Order 再加入一份巧克力：
+        费用 =10.0
+        描述 =  巧克力  3.0 &&  牛奶  2.0 &&  longblack 
+
+        Order 再再加入一份巧克力：
+        费用 =13.0
+        描述 =  巧克力  3.0 &&  巧克力  3.0 &&  牛奶  2.0 &&  longblack 
+
+        点一份无因咖啡：
+        费用 =1.0
+        描述 =  无因咖啡 
+
+        Order 加入一份牛奶：
+        费用 =3.0
+        描述 =  牛奶  2.0 &&  无因咖啡 
+
+        Process finished with exit code 0
+*/
+```
