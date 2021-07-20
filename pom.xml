@@ -19,6 +19,7 @@
         <module>bridge-mode</module>
         <module>decorator-mode</module>
         <module>combination-mode</module>
+        <module>facade-mode</module>
     </modules>
 
     <properties>
