@@ -15,6 +15,7 @@
         <module name="seven-principles" />
         <module name="prototype-mode" />
         <module name="adapter-mode" />
+        <module name="combination-mode" />
         <module name="factory-mode" />
       </profile>
     </annotationProcessing>

@@ -18,6 +18,7 @@
         <module>adapter-mode</module>
         <module>bridge-mode</module>
         <module>decorator-mode</module>
+        <module>combination-mode</module>
     </modules>
 
     <properties>
