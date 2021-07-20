@@ -19,10 +19,10 @@ public class Stereo {
     }
 
     public void off() {
-        System.out.println(" Screen off ");
+        System.out.println(" Stereo off ");
     }
 
     public void up() {
-        System.out.println(" Screen up.. ");
+        System.out.println(" Stereo up.. ");
     }
 }
