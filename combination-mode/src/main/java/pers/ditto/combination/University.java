@@ -33,7 +33,7 @@ public class University extends OrganizationComponent{
     @Override
     protected void print() {
 
-        System.out.println("---" + getName() + "---");
+        System.out.println("★ University: " + getName() + " |" + getDes());
         //遍历 organizationComponents
         for (OrganizationComponent organizationComponent : organizationComponents) {
             organizationComponent.print();

@@ -18,7 +18,6 @@ public class Department extends OrganizationComponent{
 
     @Override
     protected void print() {
-
-        System.out.println(getName());
+        System.out.println("▲ Department: " + getName() + " |" + getDes());
     }
 }
