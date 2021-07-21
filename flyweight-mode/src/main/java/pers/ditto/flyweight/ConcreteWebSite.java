@@ -21,5 +21,6 @@ public class ConcreteWebSite extends WebSite{
     @Override
     public void use(User user) {
 
+        System.out.println("网站的发布形式为: " + type + " → 正在运行中··· | 网站拥有者是: " + user.getName());
     }
 }
