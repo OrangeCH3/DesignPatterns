@@ -61,5 +61,167 @@
 代码实现：
 
 ```java
+package pers.ditto.flyweight;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+/**
+ * @author OrangeCH3
+ * @create 2021-07-21 15:41
+ */
+
+@SuppressWarnings("all")
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+public class User {
+
+    private String name;
+}
 ```
+
+```java
+package pers.ditto.flyweight;
+
+/**
+ * @author OrangeCH3
+ * @create 2021-07-21 15:40
+ */
+
+@SuppressWarnings("all")
+public abstract class WebSite {
+
+    public abstract void use(User user);//抽象方法
+}
+```
+
+```java
+package pers.ditto.flyweight;
+
+/**
+ * @author OrangeCH3
+ * @create 2021-07-21 15:41
+ */
+
+@SuppressWarnings("all")
+public class ConcreteWebSite extends WebSite{
+
+    //共享的部分，内部状态
+    private String type = ""; //网站发布的形式(类型)
+
+
+    //构造器
+    public ConcreteWebSite(String type) {
+
+        this.type = type;
+    }
+
+    @Override
+    public void use(User user) {
+
+        System.out.println("网站的发布形式为: " + type + " → 正在运行中··· | 网站拥有者是: " + user.getName());
+    }
+}
+```
+
+```java
+package pers.ditto.flyweight;
+
+import java.util.HashMap;
+
+/**
+ * @author OrangeCH3
+ * @create 2021-07-21 15:43
+ */
+
+@SuppressWarnings("all")
+public class WebSiteFactory {
+
+    //集合， 充当池的作用
+    private HashMap<String, ConcreteWebSite> pool = new HashMap<>();
+
+    //根据网站的类型，返回一个网站, 如果没有就创建一个网站，并放入到池中,并返回
+    public WebSite getWebSiteCategory(String type) {
+        if(!pool.containsKey(type)) {
+            //就创建一个网站，并放入到池中
+            pool.put(type, new ConcreteWebSite(type));
+        }
+
+        return (WebSite)pool.get(type);
+    }
+
+    //获取网站分类的总数 (池中有多少个网站类型)
+    public int getWebSiteCount() {
+        return pool.size();
+    }
+}
+```
+
+```java
+package pers.ditto.flyweight;
+
+import org.junit.Test;
+
+/**
+ * @author OrangeCH3
+ * @create 2021-07-21 15:46
+ */
+
+@SuppressWarnings("all")
+public class ClientFW {
+
+    @Test
+    public void testFW() {
+
+        // 创建一个工厂类
+        WebSiteFactory factory = new WebSiteFactory();
+
+        // 客户要一个以新闻形式发布的网站
+        WebSite webSite1 = factory.getWebSiteCategory("新闻");
+
+
+        webSite1.use(new User("Tom"));
+
+        // 客户要一个以博客形式发布的网站
+        WebSite webSite2 = factory.getWebSiteCategory("博客");
+
+        webSite2.use(new User("Jack"));
+
+        // 客户要一个以博客形式发布的网站
+        WebSite webSite3 = factory.getWebSiteCategory("博客");
+
+        webSite3.use(new User("Smith"));
+
+        // 客户要一个以博客形式发布的网站
+        WebSite webSite4 = factory.getWebSiteCategory("博客");
+
+        webSite4.use(new User("King"));
+
+        System.out.println("网站共产生了" + factory.getWebSiteCount() + "个实例");
+    }
+}
+```
+
+```java
+/* 输出结果为：
+        网站的发布形式为: 新闻 → 正在运行中··· | 网站拥有者是: Tom
+        网站的发布形式为: 博客 → 正在运行中··· | 网站拥有者是: Jack
+        网站的发布形式为: 博客 → 正在运行中··· | 网站拥有者是: Smith
+        网站的发布形式为: 博客 → 正在运行中··· | 网站拥有者是: King
+        网站共产生了2个实例
+
+        Process finished with exit code 0
+*/
+```
+
+享元模式的注意事项和细节：
+
+1. 在享元模式这样理解， “享”就表示共享， “元”表示对象
+2. 系统中有大量对象，这些对象消耗大量内存，并且对象的状态大部分可以外部化时，我们就可以考虑选用享元模式
+3. 用唯一标识码判断，如果在内存中有，则返回这个唯一标识码所标识的对象，用 HashMap/HashTable 存储
+4. 享元模式大大减少了对象的创建，降低了程序内存的占用，提高效率
+5. 享元模式提高了系统的复杂度。需要分离出内部状态和外部状态，而外部状态具有固化特性，不应该随着内部状态的改变而改变，这是我们使用享元模式需要注意的地方
+6. 使用享元模式时，注意划分内部状态和外部状态，并且需要有一个工厂类加以控制
+7. 享元模式经典的应用场景是需要缓冲池的场景，比如 String 常量池、数据库连接池
