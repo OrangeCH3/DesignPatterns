@@ -1,4 +1,4 @@
-# Go To Peak —— Design Patterns
+# Design Patterns —— Go to peak
 
 > What is the significance of this project?
 
@@ -17,4 +17,4 @@
 > One more word of encouragement?
 
 - Still water runs deep
-- Let's learn together!
+- Let's learn together
