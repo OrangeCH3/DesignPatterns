@@ -133,5 +133,154 @@ public class ClientStatic {
 
 > 动态代理
 
+基本介绍：
+
+1. 代理对象,不需要实现接口，但是目标对象要实现接口，否则不能用动态代理
+2. 代理对象的生成，是利用 JDK 的 API，动态的在内存中构建代理对象
+3. 动态代理也叫做： **JDK 代理**、**接口代理**
+
+应用实例：
+
+1. 代理类所在包: `java.lang.reflect.Proxy`
+2. JDK 实现代理只需要使用 `newProxyInstance` 方法,但是该方法需要接收三个参数,完整的写法是 `static Object newProxyInstance(ClassLoader loader, Class<?>[] interfaces,InvocationHandler h )`
+3. 将前面的静态代理改进成动态代理模式
+
+原理类图：
+
+![动态代理](./PictureMaterial/动态代理.png)
+
+代码实现：
+
+```java
+package pers.ditto.dynamicproxy;
+
+/**
+ * @author OrangeCH3
+ * @create 2021-07-22 15:10
+ */
+
+@SuppressWarnings("all")
+public interface ITeacherDao {
+
+    void teach(); // 授课方法
+    void sayHello(String name);
+}
+```
+
+```java
+package pers.ditto.dynamicproxy;
+
+/**
+ * @author OrangeCH3
+ * @create 2021-07-22 15:11
+ */
+
+@SuppressWarnings("all")
+public class TeacherDao implements ITeacherDao{
+
+
+    @Override
+    public void teach() {
+        System.out.println("老师正在授课中");
+    }
+
+    @Override
+    public void sayHello(String name) {
+        System.out.println("Say hello to: " + name);
+    }
+}
+```
+
+```java
+package pers.ditto.dynamicproxy;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+
+/**
+ * @author OrangeCH3
+ * @create 2021-07-22 15:12
+ */
+
+@SuppressWarnings("all")
+public class ProxyFactory {
+
+    //维护一个目标对象, Object
+    private Object target;
+
+    //构造器， 对 target 进行初始化
+    public ProxyFactory(Object target) {
+
+        this.target = target;
+    }
+
+    //给目标对象 生成一个代理对象
+    public Object getProxyInstance() {
+
+		/*  说明
+		 *  public static Object newProxyInstance(ClassLoader loader,
+                                          Class<?>[] interfaces,
+                                          InvocationHandler h)
+
+            //1. ClassLoader loader ： 指定当前目标对象使用的类加载器, 获取加载器的方法固定
+            //2. Class<?>[] interfaces: 目标对象实现的接口类型，使用泛型方法确认类型
+            //3. InvocationHandler h : 事情处理，执行目标对象的方法时，会触发事情处理器方法, 会把当前执行的目标对象方法作为参数传入
+		 */
+        return Proxy.newProxyInstance(target.getClass().getClassLoader(),
+                target.getClass().getInterfaces(),
+                new InvocationHandler() {
+
+                    @Override
+                    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                        System.out.println("JDK代理开始");
+                        //反射机制调用目标对象的方法
+                        Object returnVal = method.invoke(target, args);
+                        System.out.println("JDK代理提交");
+                        return returnVal;
+                    }
+                });
+    }
+}
+```
+
+```java
+package pers.ditto.dynamicproxy;
+
+import org.junit.Test;
+
+/**
+ * @author OrangeCH3
+ * @create 2021-07-22 15:15
+ */
+
+@SuppressWarnings("all")
+public class ClientDynamic {
+
+    @Test
+    public void testDynamic() {
+
+        //创建目标对象
+        ITeacherDao target = new TeacherDao();
+
+        //给目标对象，创建代理对象, 可以转成 ITeacherDao
+        ITeacherDao proxyInstance = (ITeacherDao)new ProxyFactory(target).getProxyInstance();
+
+        // proxyInstance=class com.sun.proxy.$Proxy0 内存中动态生成了代理对象
+        System.out.println("proxyInstance=" + proxyInstance.getClass());
+
+        //通过代理对象，调用目标对象的方法
+        proxyInstance.teach();
+        System.out.println();
+        proxyInstance.sayHello("Tom");
+    }
+}
+```
+
+
+
+
+
+
 
 
