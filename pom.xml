@@ -21,6 +21,7 @@
         <module>combination-mode</module>
         <module>facade-mode</module>
         <module>flyweight-mode</module>
+        <module>proxy-mode</module>
     </modules>
 
     <properties>
