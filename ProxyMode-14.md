@@ -277,10 +277,159 @@ public class ClientDynamic {
 }
 ```
 
+---
 
+> Cglib 代理
 
+基本介绍：
 
+1. 静态代理和 JDK 代理模式都要求目标对象是实现一个接口,但是有时候目标对象只是一个单独的对象,并没有实现任何的接口,这个时候可使用目标对象子类来实现代理-这就是 Cglib 代理
+2. Cglib代理也叫作子类代理,它是在内存中构建一个子类对象从而实现对目标对象功能扩展, 有些书也将Cglib代理归属到动态代理
+3. Cglib 是一个强大的高性能的代码生成包,它可以在运行期扩展 java 类与实现 java 接口。它广泛的被许多 AOP 的框架使用,例如 Spring AOP，实现方法拦截
+4. 在 AOP 编程中如何选择代理模式：
+   1. 目标对象需要实现接口，用 JDK 代理
+   2. 目标对象不需要实现接口，用 Cglib 代理
+5. Cglib 包的底层是通过使用字节码处理框架 ASM 来转换字节码并生成新的类
 
+实现步骤：
 
+1. 引入 Cglib 的 jar 文件
+2. 在内存中动态构建子类，注意代理的类不能为 final，否则报错 `java.lang.IllegalArgumentException`
+3. 目标对象的方法如果为 final/static,那么就不会被拦截,即不会执行目标对象额外的业务方法
 
+应用实例：
 
+将前面的案例用 Cglib 代理模式实现
+
+原理类图：
+
+![Cglilb代理](./PictureMaterial/Cglilb代理.png)
+
+代码实现：
+
+```java
+package pers.ditto.cglibproxy;
+
+/**
+ * @author OrangeCH3
+ * @create 2021-07-22 15:34
+ */
+
+@SuppressWarnings("all")
+public class TeacherDao {
+
+    public String teach() {
+        System.out.println("老师正在授课中");
+        return "这是一条授课完成回执信息";
+    }
+}
+```
+
+```java
+package pers.ditto.cglibproxy;
+
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.MethodInterceptor;
+import net.sf.cglib.proxy.MethodProxy;
+
+import java.lang.reflect.Method;
+
+/**
+ * @author OrangeCH3
+ * @create 2021-07-22 15:36
+ */
+
+@SuppressWarnings("all")
+public class ProxyFactory implements MethodInterceptor {
+
+    //维护一个目标对象
+    private Object target;
+
+    //构造器，传入一个被代理的对象
+    public ProxyFactory(Object target) {
+        this.target = target;
+    }
+
+    //返回一个代理对象:  是 target 对象的代理对象
+    public Object getProxyInstance() {
+        //1. 创建一个工具类
+        Enhancer enhancer = new Enhancer();
+        //2. 设置父类
+        enhancer.setSuperclass(target.getClass());
+        //3. 设置回调函数
+        enhancer.setCallback(this);
+        //4. 创建子类对象，即代理对象
+        return enhancer.create();
+
+    }
+
+    //重写  intercept 方法，会调用目标对象的方法
+    @Override
+    public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
+        // TODO Auto-generated method stub
+        System.out.println("Cglib代理模式开始");
+        Object returnVal = method.invoke(target, args);
+        System.out.println("Cglib代理模式提交");
+        return returnVal;
+    }
+
+}
+```
+
+```java
+package pers.ditto.cglibproxy;
+
+import org.junit.Test;
+
+import java.security.PublicKey;
+
+/**
+ * @author OrangeCH3
+ * @create 2021-07-22 15:39
+ */
+
+@SuppressWarnings("all")
+public class ClientCglib {
+
+    @Test
+    public void testCglib() {
+
+        //创建目标对象
+        TeacherDao target = new TeacherDao();
+        //获取到代理对象，并且将目标对象传递给代理对象
+        TeacherDao proxyInstance = (TeacherDao)new ProxyFactory(target).getProxyInstance();
+
+        //执行代理对象的方法，触发intecept 方法，从而实现 对目标对象的调用
+        String res = proxyInstance.teach();
+        System.out.println();
+        System.out.println("教师回执信息 → " + res);
+    }
+}
+```
+
+若出现 Maven 包引入不成功，在 pom.xml 中作以下修改：
+```xml
+<repositories>
+        <repository>
+            <id>maven-ali</id>
+            <url>https://maven.aliyun.com/nexus/content/repositories/central</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+```
+
+---
+
+> 几种代理模式的变体
+
+1. 防火墙代理，内网通过代理穿透防火墙，实现对公网的访问
+2. 缓存代理，当请求图片文件等资源时，先到缓存代理取，如果取到资源则 ok,如果取不到资源，再到公网或者数据库取，然后缓存
+3. 远程代理，远程对象的本地代表，通过它可以把远程对象当本地对象来调用。远程代理通过网络和真正的远程对象沟通信息
+4. 同步代理，主要使用在多线程编程中，完成多线程间同步工作
