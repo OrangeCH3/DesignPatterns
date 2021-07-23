@@ -16,6 +16,7 @@
         <module name="decorator-mode" />
         <module name="flyweight-mode" />
         <module name="proxy-mode" />
+        <module name="command-mode" />
         <module name="singleton-mode" />
         <module name="bridge-mode" />
         <module name="template-mode" />

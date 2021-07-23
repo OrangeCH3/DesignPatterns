@@ -23,6 +23,7 @@
         <module>flyweight-mode</module>
         <module>proxy-mode</module>
         <module>template-mode</module>
+        <module>command-mode</module>
     </modules>
 
     <properties>
