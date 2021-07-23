@@ -18,6 +18,7 @@
         <module name="proxy-mode" />
         <module name="singleton-mode" />
         <module name="bridge-mode" />
+        <module name="template-mode" />
         <module name="prototype-mode" />
         <module name="adapter-mode" />
       </profile>
