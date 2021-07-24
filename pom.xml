@@ -24,6 +24,7 @@
         <module>proxy-mode</module>
         <module>template-mode</module>
         <module>command-mode</module>
+        <module>visitor-mode</module>
     </modules>
 
     <properties>
