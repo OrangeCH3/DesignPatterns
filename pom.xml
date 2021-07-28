@@ -25,6 +25,7 @@
         <module>template-mode</module>
         <module>command-mode</module>
         <module>visitor-mode</module>
+        <module>iterator-mode</module>
     </modules>
 
     <properties>
