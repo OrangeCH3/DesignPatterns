@@ -11,6 +11,7 @@
         <module name="facade-mode" />
         <module name="iterator-mode" />
         <module name="seven-principles" />
+        <module name="observer-mode" />
         <module name="combination-mode" />
         <module name="factory-mode" />
         <module name="builder-mode" />

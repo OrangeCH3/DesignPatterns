@@ -26,6 +26,7 @@
         <module>command-mode</module>
         <module>visitor-mode</module>
         <module>iterator-mode</module>
+        <module>observer-mode</module>
     </modules>
 
     <properties>
