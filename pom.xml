@@ -29,6 +29,7 @@
         <module>observer-mode</module>
         <module>mediator-mode</module>
         <module>memento-mode</module>
+        <module>interpreter-mode</module>
     </modules>
 
     <properties>
