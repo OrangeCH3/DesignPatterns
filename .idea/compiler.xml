@@ -22,6 +22,7 @@
         <module name="proxy-mode" />
         <module name="visitor-mode" />
         <module name="command-mode" />
+        <module name="state-mode" />
         <module name="singleton-mode" />
         <module name="bridge-mode" />
         <module name="template-mode" />

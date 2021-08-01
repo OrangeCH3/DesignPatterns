@@ -30,6 +30,7 @@
         <module>mediator-mode</module>
         <module>memento-mode</module>
         <module>interpreter-mode</module>
+        <module>state-mode</module>
     </modules>
 
     <properties>
