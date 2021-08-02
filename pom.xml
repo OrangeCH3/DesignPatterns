@@ -32,6 +32,7 @@
         <module>interpreter-mode</module>
         <module>state-mode</module>
         <module>strategy-mode</module>
+        <module>responsibility-mode</module>
     </modules>
 
     <properties>
