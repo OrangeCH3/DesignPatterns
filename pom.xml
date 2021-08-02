@@ -31,6 +31,7 @@
         <module>memento-mode</module>
         <module>interpreter-mode</module>
         <module>state-mode</module>
+        <module>strategy-mode</module>
     </modules>
 
     <properties>
